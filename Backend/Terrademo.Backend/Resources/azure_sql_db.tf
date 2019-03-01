@@ -1,6 +1,6 @@
-#Author:
-#Purpose:
-#Description:
+# Author: Aneal Roney
+# Title: Azure SQL DB
+# Description: This creates an azure sql db and associated azure sql server.  This database is blank with NO sample data.
 
 resource "azurerm_sql_server" "test" {
   name                         = "${var.sqlsrvname}${random_integer.ri.result}"
