@@ -1,3 +1,6 @@
+# Author: Aneal Roney
+# Title: Resource Group
+# Description: This is the required resource group that must be included with every creation.
 
 variable "location" { } 
 variable "rgroup" { }
