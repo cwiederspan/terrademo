@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  terrademo.backend:
+    image: ${DOCKER_REGISTRY-}terrademobackend
+    build:
+      context: .
+      dockerfile: Terrademo.Backend/Dockerfile
