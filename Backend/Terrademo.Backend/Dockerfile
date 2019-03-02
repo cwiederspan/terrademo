@@ -7,6 +7,7 @@ WORKDIR /src
 COPY ["/Terrademo.Backend/Terrademo.Backend.csproj", "Terrademo.Backend/"]
 RUN dotnet restore "Terrademo.Backend/Terrademo.Backend.csproj"
 COPY . .
+COPY ["/Terrademo.Backend/Resources/*", "/app/Resources/"]
 WORKDIR "/src/Terrademo.Backend"
 RUN dotnet build "Terrademo.Backend.csproj" -c Release -o /app
 

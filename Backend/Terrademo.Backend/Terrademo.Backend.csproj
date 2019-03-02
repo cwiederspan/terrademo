@@ -13,8 +13,4 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Resources\**\*.tf" />
-  </ItemGroup>
-
 </Project>
