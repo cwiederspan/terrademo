@@ -4,7 +4,7 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
-COPY ["Terrademo.Backend/Terrademo.Backend.csproj", "Terrademo.Backend/"]
+COPY ["/Terrademo.Backend/Terrademo.Backend.csproj", "Terrademo.Backend/"]
 RUN dotnet restore "Terrademo.Backend/Terrademo.Backend.csproj"
 COPY . .
 WORKDIR "/src/Terrademo.Backend"
