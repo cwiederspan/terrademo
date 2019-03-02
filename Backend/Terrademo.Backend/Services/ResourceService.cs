@@ -26,21 +26,20 @@ namespace Terrademo.Backend.Services {
 
             var tasks = Directory.EnumerateFiles(this.Root).Select(async file => {
 
+                var filename = Path.GetFileName(file);
                 var content = await File.ReadAllTextAsync(file);
 
-                return this.ParseResource(content);
+                var resource = new Resource() {
+                    Filename = filename,
+                    Author = this.ParseValue("Author", content),
+                    Title = this.ParseValue("Title", content),
+                    Description = this.ParseValue("Description", content)
+                };
+
+                return resource;
             });
 
             return await Task.WhenAll(tasks);
-        }
-
-        internal Resource ParseResource(string content) {
-
-            return new Resource() {
-                Author = this.ParseValue("Author", content),
-                Title = this.ParseValue("Title", content),
-                Description = this.ParseValue("Description", content)
-            };
         }
 
         internal string ParseValue(string label, string content) {

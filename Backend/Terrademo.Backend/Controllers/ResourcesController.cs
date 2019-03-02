@@ -28,7 +28,6 @@ namespace Terrademo.Backend.Controllers {
 
             var resources = await this.Service.GetResourcesAsync();
 
-
             return this.Ok(resources);
         }
 
