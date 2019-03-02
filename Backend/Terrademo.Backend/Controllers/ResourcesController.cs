@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
 using Terrademo.Backend.Services;
 using Terrademo.Backend.Models;
+using System.Net;
 
 namespace Terrademo.Backend.Controllers {
 
@@ -26,9 +27,14 @@ namespace Terrademo.Backend.Controllers {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Resource>>> GetAsync() {
 
-            var resources = await this.Service.GetResourcesAsync();
+            try {
 
-            return this.Ok(resources);
+                var resources = await this.Service.GetResourcesAsync();
+                return this.Ok(resources);
+            }
+            catch (Exception ex) {
+                return this.StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
 
         // POST api/resources

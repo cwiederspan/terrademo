@@ -43,14 +43,15 @@ resource "azurerm_app_service" "app" {
   
   site_config {
     always_on         = true
-    linux_fx_version  = "DOCKER|mcr.microsoft.com/dotnet/core/samples:aspnetapp"
+    linux_fx_version  = "DOCKER|${azurerm_container_registry.acr.name}.azurecr.io/backend/resources:latest"
     # default_documents = [ "Index.html" ]
   }
   
   app_settings {
     WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
-    DOCKER_REGISTRY_SERVER_URL          = "https://mcr.microsoft.com"
-    # DOCKER_REGISTRY_SERVER_USERNAME     = "${azurerm_container_registry.acr.name}"
-    # DOCKER_REGISTRY_SERVER_PASSWORD     = "${azurerm_container_registry.acr.admin_password}"
+    DOCKER_REGISTRY_SERVER_URL          = "https://${azurerm_container_registry.acr.name}.azurecr.io"
+    DOCKER_CUSTOM_IMAGE_NAME            = "https://${azurerm_container_registry.acr.name}.azurecr.io/backend/resources:latest"
+    DOCKER_REGISTRY_SERVER_USERNAME     = "${azurerm_container_registry.acr.name}"
+    DOCKER_REGISTRY_SERVER_PASSWORD     = "${azurerm_container_registry.acr.admin_password}"
   }
 }

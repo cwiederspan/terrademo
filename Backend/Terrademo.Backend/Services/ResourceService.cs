@@ -24,7 +24,12 @@ namespace Terrademo.Backend.Services {
 
         public async Task<IEnumerable<Resource>> GetResourcesAsync() {
 
-            var files = Directory.EnumerateFiles(this.Root).ToList();
+            var files = Directory.EnumerateFiles(this.Root)?.ToList();
+
+            if (files is null || files.Count == 0) {
+                throw new FileNotFoundException($"Unable to find files in location '{this.Root}'.");
+            }
+
             var resources = await this.ProcessFilesAsync(files);
             return resources;
         }
