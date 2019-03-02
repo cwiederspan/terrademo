@@ -7,11 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terrademo.Backend", "Terrad
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B2681F71-5B08-46A5-AAC8-0E433D2D55D0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D619993E-7636-4BDD-827B-5B9F39F12480}"
-	ProjectSection(SolutionItems) = preProject
-		azure-pipelines.yaml = azure-pipelines.yaml
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terrademo.Backend.UnitTests", "Terrademo.Backend.UnitTests\Terrademo.Backend.UnitTests.csproj", "{386B5154-17C1-4568-8C7A-AD656AAE3417}"
 EndProject
 Global
