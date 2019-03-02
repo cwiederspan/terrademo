@@ -24,7 +24,14 @@ namespace Terrademo.Backend.Services {
 
         public async Task<IEnumerable<Resource>> GetResourcesAsync() {
 
-            var tasks = Directory.EnumerateFiles(this.Root).Select(async file => {
+            var files = Directory.EnumerateFiles(this.Root).ToList();
+            var resources = await this.ProcessFilesAsync(files);
+            return resources;
+        }
+
+        internal async Task<IEnumerable<Resource>> ProcessFilesAsync(IList<string> files) {
+
+            var tasks = files.Select(async file => {
 
                 var filename = Path.GetFileName(file);
                 var content = await File.ReadAllTextAsync(file);
@@ -33,7 +40,8 @@ namespace Terrademo.Backend.Services {
                     Filename = filename,
                     Author = this.ParseValue("Author", content),
                     Title = this.ParseValue("Title", content),
-                    Description = this.ParseValue("Description", content)
+                    Description = this.ParseValue("Description", content),
+                    Variables = this.ParseVariables(content)
                 };
 
                 return resource;
@@ -55,5 +63,15 @@ namespace Terrademo.Backend.Services {
 
             return result;
         }
+
+        internal IList<string> ParseVariables(string content) {
+            
+            var exp = @"\$\{var.(?<variable>\w+)\}";
+            var matches = Regex.Matches(content, exp, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            var variables = matches.SelectMany(m => m.Groups["variable"].Captures.Select(c => c.Value)).Distinct().ToList();
+
+            return variables;
+        }
     }
 }
+ 
