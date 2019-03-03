@@ -48,5 +48,18 @@ namespace Terrademo.Backend.Services {
 
             Assert.True(results.Count == 0, String.Join("\r\n", results));
         }
+
+        [Theory]
+        [InlineData(null, "")]
+        [InlineData(new string[0], "")]
+        [InlineData(new string[] { "location" }, "location = \"\"\n")]
+        [InlineData(new string[] { "location", "location" }, "location = \"\"\n")]
+        [InlineData(new string[] { "resource_group", "location" }, "location       = \"\"\nresource_group = \"\"\n")]
+        public void BuildVariableContent_FromValidValues_ReturnsCorrectContent(IList<string> variables, string expected) {
+
+            var sut = new ResourceService("NOT_USED");
+            var actual = sut.BuildVariableContent(variables);
+            Assert.Equal(expected, actual);
+        }
     }
 }

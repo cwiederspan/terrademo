@@ -39,8 +39,16 @@ namespace Terrademo.Backend.Controllers {
 
         // POST api/resources
         [HttpPost]
-        public void Post([FromBody] string value) {
+        public async Task<IActionResult> PostAsync([FromBody] ResourceRequest request) {
 
+            try {
+
+                var data = await this.Service.BuildResourceFileAsync(request.Files);
+                return this.File(data, "application/zip");
+            }
+            catch (Exception ex) {
+                return this.StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }
