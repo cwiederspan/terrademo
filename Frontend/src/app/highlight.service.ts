@@ -8,7 +8,8 @@ import 'clipboard';
 import 'prismjs';
 import 'prismjs/plugins/toolbar/prism-toolbar';
 import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
-import 'prismjs/components/prism-hcl';
+//import './prism-hcl' as 'prism-hcl'; //'prismjs/components/prism-hcl' from './prism-hcl';
+import "./prism-hcl";
 
 declare var Prism: any;
 
