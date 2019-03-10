@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  backendUrl: 'https://terrademo20190301.azurewebsites.net'
+  backendUrl: 'https://terrademo-backend.azurewebsites.net'
 };

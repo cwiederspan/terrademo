@@ -8,8 +8,7 @@ import 'clipboard';
 import 'prismjs';
 import 'prismjs/plugins/toolbar/prism-toolbar';
 import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard';
-//import './prism-hcl' as 'prism-hcl'; //'prismjs/components/prism-hcl' from './prism-hcl';
-import "./prism-hcl";
+import "./prism-hcl";   // This file isn't part of the node_modules package contents, so add it manually
 
 declare var Prism: any;
 
