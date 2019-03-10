@@ -1,1 +1,81 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@import "~prismjs/plugins/toolbar/prism-toolbar.css";
+@import "~prismjs/themes/prism.css";
+
+@primary: #3f51b5;
+
+html, body { 
+    height: 100%; 
+}
+
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+    width: 100%;
+}
+
+.container-main {
+    padding-top: 30px;
+}
+
+.resource-card {
+  display: block;
+  position: relative;
+  //border-radius: 4px;
+  margin-bottom: 16px;
+  
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+
+  text-align: left;
+  font-weight: 400;
+
+  .title {
+    color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size: 16px;
+    font-weight: 400;
+
+    .view-code-button {
+      color: rgba(0, 0, 0, 0.40);
+      position: absolute;
+      margin-top: -8px;
+      right: 8px;
+    }
+  }
+
+  .body {
+    margin: 16px;
+    padding-bottom: 2px;
+    color: rgba(0, 0, 0, 0.75);
+    font-size: 15px;
+
+    .label {
+      color: @primary;
+      font-size: 11px;
+      font-weight: 500;
+      padding-bottom: 3px;
+    }
+
+    p {
+      padding: 0;
+      margin: 0;
+      margin-bottom: 16px;
+    }
+
+    .code-view {
+      // padding: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-left: -16px;
+      margin-right: -16px;
+      margin-bottom: -3px;
+      border-top: 1px solid rgba(0,0,0,.15);
+    }
+  }
+}

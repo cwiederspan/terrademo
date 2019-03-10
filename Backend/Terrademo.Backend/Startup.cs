@@ -28,6 +28,9 @@ namespace Terrademo.Backend {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            // Add CORS support
+            services.AddCors();
+
             var contentRoot = $"{this.Configuration.GetValue<string>(WebHostDefaults.ContentRootKey)}/Resources";
             services.AddTransient<Services.IResourceService>(sp => new ResourceService(contentRoot));
         }
@@ -38,6 +41,9 @@ namespace Terrademo.Backend {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Setup the CORS support
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseMvc();
         }

@@ -1,21 +1,70 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
-<router-outlet></router-outlet>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row class="container-toolbar">
+      <div fxFlex="50%"></div>
+      <div fxFlex="480px" style="text-align: left">
+        <span>Terrademo</span>
+      </div>
+      <div fxFlex="480px" style="text-align: right">
+          <button mat-flat-button>Submit</button>
+      </div>
+      <div fxFlex="50%"></div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div fxLayout="row">
+
+    <div fxFlex="50%"></div>
+
+    <div fxFlex="960px" class="container-main">
+
+      <div class="resource-card" *ngFor="let vm of resources">
+        <div class="title">
+          <mat-slide-toggle 
+            [checked]="vm.required || vm.selected" 
+            (change)="vm.selected = !vm.selected"
+            [disabled]="vm.required"
+          >{{ vm.resource.title }}</mat-slide-toggle>
+          <!-- <mat-checkbox>SQL Server w/ Sample Database</mat-checkbox> -->
+          <button mat-icon-button class="view-code-button" (click)="vm.showCode = !vm.showCode">
+            <mat-icon>code</mat-icon>
+          </button>
+
+        </div>
+
+        <div class="body">
+
+          <div class="label">Description</div>
+          <p>{{ vm.resource.description }}</p>
+          
+          <div class="label">Created by</div>
+          <p>{{ vm.resource.author }}</p>
+          
+          <!-- <div class="label">Tags</div> -->
+          <!-- <p>
+            <mat-chip-list>
+              <mat-chip>One fish</mat-chip>
+              <mat-chip>Two fish</mat-chip>
+              <mat-chip color="primary" selected>Primary fish</mat-chip>
+              <mat-chip color="accent" selected>Accent fish</mat-chip>
+            </mat-chip-list>
+          </p> -->
+
+          <pre class="code-view" *ngIf="vm.resource.content && vm.showCode">
+            <code class="language-hcl">{{ '\n' + vm.resource.content.trim() }}</code>
+          </pre>
+
+        </div>
+      </div>
+
+      <router-outlet></router-outlet>
+
+    </div>
+
+    <div fxFlex="50%"></div>
+
+  </div>
+
+</div>

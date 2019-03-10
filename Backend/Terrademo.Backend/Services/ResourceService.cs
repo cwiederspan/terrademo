@@ -103,7 +103,7 @@ namespace Terrademo.Backend.Services {
                 Author = this.ParseValue("Author", content),
                 Title = this.ParseValue("Title", content),
                 Description = this.ParseValue("Description", content),
-                Content = content,
+                Content = content.Trim(),
                 Variables = this.ParseVariables(content)
             };
 

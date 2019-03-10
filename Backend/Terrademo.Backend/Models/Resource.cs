@@ -17,7 +17,6 @@ namespace Terrademo.Backend.Models {
 
         public string Description { get; set; }
 
-        [JsonIgnore]
         public string Content { get; set; }
 
         public IEnumerable<string> Tags { get; set; }
