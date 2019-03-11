@@ -27,7 +27,8 @@ export class ResourceService {
 
         return this.http.get<Resource[]>(url)
             .pipe(
-                tap(resources => this.log(`fetched resources`)),
+                tap(r => this.log(`fetched resources`)),
+                tap(r => r.sort((a, b) => a.filename.localeCompare(b.filename))),
                 catchError(this.handleError('getResources', []))
             );
     }
