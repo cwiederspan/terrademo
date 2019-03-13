@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-import { Resource } from './shared/models';
+import { Resource, ResourceRequest } from './shared/models';
 import { environment } from '../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -31,6 +31,19 @@ export class ResourceService {
                 tap(r => r.sort((a, b) => a.filename.localeCompare(b.filename))),
                 catchError(this.handleError('getResources', []))
             );
+    }
+
+    public submitResourceRequest(resources: Resource[]): Observable<Blob> {
+
+        const url = `${this.baseUrl}`;
+
+        const request: ResourceRequest = {
+            files: resources.map(r => r.filename)
+        };
+
+        const options = { responseType: 'blob' as 'json' }; //ResponseContentType.ArrayBuffer};
+        
+        return this.http.post<Blob>(url, request, options);
     }
 
     /**

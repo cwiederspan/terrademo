@@ -12,6 +12,8 @@ import { MatMenuModule, MatExpansionModule, MatIconModule, MatToolbarModule, Mat
 import { HighlightService } from './highlight.service';
 import { ResourceService } from './resource.service';
 
+import { FileSaverModule } from 'ngx-filesaver';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -37,7 +39,9 @@ import { ResourceService } from './resource.service';
     MatDividerModule,
     MatExpansionModule,
     MatSlideToggleModule,
-    MatCardModule
+    MatCardModule,
+
+    FileSaverModule
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

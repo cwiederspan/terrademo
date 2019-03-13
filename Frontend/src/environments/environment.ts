@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'http://localhost:32768'
+  backendUrl: 'http://localhost:32769'
   //backendUrl: 'https://ga-web-api-prod-20180723.azurewebsites.net'
 };
 

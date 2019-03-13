@@ -7,3 +7,8 @@ export interface Resource {
     content: string;
     tags: string[];
 }
+
+export interface ResourceRequest {
+
+    files: string[];
+}
