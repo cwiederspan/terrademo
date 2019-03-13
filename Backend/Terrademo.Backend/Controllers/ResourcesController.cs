@@ -7,11 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Terrademo.Backend.Services;
 using Terrademo.Backend.Models;
 using System.Net;
-using System.Text;
 
 namespace Terrademo.Backend.Controllers {
 
-    //[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ResourcesController : ControllerBase {
 
@@ -25,7 +24,7 @@ namespace Terrademo.Backend.Controllers {
         }
 
         // GET api/resources
-        [HttpGet("api/resources")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Resource>>> GetAsync() {
 
             try {
@@ -39,31 +38,13 @@ namespace Terrademo.Backend.Controllers {
         }
 
         // POST api/resources
-        [HttpPost("api/resources")]
+        [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] ResourceRequest request) {
 
             try {
 
                 var data = await this.Service.BuildResourceFileAsync(request.Files);
                 return this.File(data, "application/zip");
-            }
-            catch (Exception ex) {
-                return this.StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
-
-        // POST api/resources
-        [HttpGet("api/resources/download")]
-        public async Task<IActionResult> GetDownloadAsync(string data) {
-
-            try {
-
-                byte[] bytes = Convert.FromBase64String(data);
-                string files = Encoding.UTF8.GetString(bytes);
-                string[] filenames = files.Split(",");
-
-                var zipdata = await this.Service.BuildResourceFileAsync(filenames);
-                return this.File(zipdata, "application/zip");
             }
             catch (Exception ex) {
                 return this.StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);

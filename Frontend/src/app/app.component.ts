@@ -35,17 +35,7 @@ export class AppComponent implements AfterViewChecked {
 
       this.resourceService
         .submitResourceRequest(selectedResources)
-        .subscribe(blob => {
-
-          console.log("Component.Step 1");
-
-          //Success
-          console.log('start download:', blob);
-          var blob = new Blob([blob], { type: "application/pdf" } );
-
-          console.log("Component.Step 2");
-          this.fileSaverService.save(blob, "terrademo.zip");
-        });
+        .subscribe(blob => this.fileSaverService.save(blob, "terrademo.zip"));
     }
 
     ngAfterViewChecked() {

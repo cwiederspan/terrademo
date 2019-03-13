@@ -41,7 +41,7 @@ export class ResourceService {
             files: resources.map(r => r.filename)
         };
 
-        const options = { responseType: 'blob' as 'json' }; //ResponseContentType.ArrayBuffer};
+        const options = { responseType: 'blob' as 'json' };
         
         return this.http.post<Blob>(url, request, options);
     }
