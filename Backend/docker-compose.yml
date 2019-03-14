@@ -3,6 +3,8 @@ version: '3.4'
 services:
   terrademo.backend:
     image: ${DOCKER_REGISTRY-}terrademobackend
+    ports: 
+    - 32700:80
     build:
       context: .
       dockerfile: Terrademo.Backend/Dockerfile
