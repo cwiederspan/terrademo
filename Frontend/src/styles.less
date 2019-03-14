@@ -16,6 +16,15 @@ body {
     width: 100%;
 }
 
+// Rotate the Toggle Bars so they're left/on and right/off
+.mat-slide-toggle-bar {
+  transform: rotate(180deg);
+
+  .mat-slide-toggle-thumb {
+    transform: rotate(180deg);
+  }
+}
+
 .container-toobar {
   mat-slide-toggle {
     font-size: 16px;

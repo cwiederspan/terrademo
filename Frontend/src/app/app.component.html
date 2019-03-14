@@ -46,14 +46,11 @@
           <p>{{ vm.resource.author }}</p>
           
           <!-- <div class="label">Tags</div> -->
-          <!-- <p>
+          <p>
             <mat-chip-list>
-              <mat-chip>One fish</mat-chip>
-              <mat-chip>Two fish</mat-chip>
-              <mat-chip color="primary" selected>Primary fish</mat-chip>
-              <mat-chip color="accent" selected>Accent fish</mat-chip>
+              <mat-chip color="primary" selected *ngFor="let tag of vm.resource.tags">{{tag}}</mat-chip>
             </mat-chip-list>
-          </p> -->
+          </p>
 
           <pre class="code-view" *ngIf="vm.resource.content && vm.showCode">
             <code class="language-hcl">{{ '\n' + vm.resource.content.trim() }}</code>
