@@ -4,6 +4,7 @@ import { ResourceService } from './resource.service';
 import { ResourceViewModel } from './resource.viewmodel';
 
 import { FileSaverService } from 'ngx-filesaver';
+import { MatSlideToggle } from '@angular/material';
 
 @Component({
     selector: 'app-root',
@@ -27,6 +28,18 @@ export class AppComponent implements AfterViewChecked {
         .subscribe(data => this.resources = data.map(r => new ResourceViewModel(r)));
 
       this.highlightService.highlightAll();
+    }
+
+    public filterByTag(tag: string, item: MatSlideToggle) {
+      
+      console.log(`Changing ${tag} to ${item.checked}...`);
+
+      this.resources.forEach(vm => {
+        if (vm.resource.tags.includes(tag) === true) {
+          console.log("It working!!!");
+          vm.visible = item.checked;
+        }
+      });
     }
 
     public downloadFile() {

@@ -31,7 +31,7 @@ namespace Terrademo.Backend.Services {
         [InlineData("location = \"${var.resource_name}\"", new string[] { "resource_name" })]
         [InlineData("location = \"${var.resource}-${var.location}\"", new string[] { "location", "resource" })]
         [InlineData("location = \"${var.resource}\" \r\n resource = \"${var.location}\"", new string[] { "location", "resource" })]
-        public void ParseVariables_FromValidValues_ReturnsCorrectListOfVariables( string content, IList<string> expected) {
+        public void ParseVariables_FromValidValues_ReturnsCorrectListOfVariables(string content, IList<string> expected) {
 
             var sut = new ResourceService("NOT_USED");
             var actuals = sut.ParseVariables(content);
@@ -60,6 +60,31 @@ namespace Terrademo.Backend.Services {
             var sut = new ResourceService("NOT_USED");
             var actual = sut.BuildVariableContent(variables);
             Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(null, new string[0])]
+        [InlineData("", new string[0])]
+        [InlineData("Infrastructure", new string[] { "Infrastructure" })]
+        [InlineData(" Infrastructure ", new string[] { "Infrastructure" })]
+        [InlineData("Infrastructure, Apps", new string[] { "Apps", "Infrastructure" })]
+        [InlineData(" Infrastructure , Apps ", new string[] { "Apps", "Infrastructure" })]
+        public void ParseTags_FromValidValues_ReturnsCorrectListOfTags(string content, IList<string> expected) {
+
+            var sut = new ResourceService("NOT_USED");
+            var actuals = sut.ParseTags(content);
+
+            var results1 = expected
+                .Select(value => !actuals.Contains(value) ? $"Actual values are missing expected tag '{value}'" : null)
+                .ToList();
+
+            var results2 = actuals
+                .Select(value => !expected.Contains(value) ? $"Actual tag '{value}' was not in expected results" : null)
+                .ToList();
+
+            var results = results1.Concat(results2).Where(x => !String.IsNullOrEmpty(x)).Distinct().ToList();
+
+            Assert.True(results.Count == 0, String.Join("\r\n", results));
         }
     }
 }

@@ -97,6 +97,8 @@ namespace Terrademo.Backend.Services {
 
             var filename = Path.GetFileName(filepath);
             var content = await File.ReadAllTextAsync(filepath);
+            var tagtext = this.ParseValue("Tags", content);
+            var tags = this.ParseTags(tagtext);
 
             var resource = new Resource() {
                 Filename = filename,
@@ -104,6 +106,7 @@ namespace Terrademo.Backend.Services {
                 Title = this.ParseValue("Title", content),
                 Description = this.ParseValue("Description", content),
                 Content = content.Trim(),
+                Tags = tags,
                 Variables = this.ParseVariables(content)
             };
 
@@ -114,6 +117,7 @@ namespace Terrademo.Backend.Services {
 
             string result = null;
 
+            content = content ?? "";
             var exp = $@"[#]\s*({label})\s*[:](?<value>.*)(\r|\n|$)";
             var matches = Regex.Match(content, exp, RegexOptions.IgnoreCase);
 
@@ -131,6 +135,18 @@ namespace Terrademo.Backend.Services {
             var variables = matches.SelectMany(m => m.Groups["variable"].Captures.Select(c => c.Value)).Distinct().ToList();
 
             return variables;
+        }
+
+        internal IList<string> ParseTags(string content) {
+
+            content = content ?? "";
+
+            var tags = content.Split(",")
+                .Select(t => t.Trim())
+                .Where(t => String.IsNullOrWhiteSpace(t) == false)
+                .ToList();
+
+            return tags;
         }
 
         internal string BuildVariableContent(IList<string> variables) {

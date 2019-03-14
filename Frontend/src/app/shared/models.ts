@@ -1,5 +1,4 @@
 export interface Resource {
-
     filename: string;
     author: string;
     title: string;
@@ -9,6 +8,5 @@ export interface Resource {
 }
 
 export interface ResourceRequest {
-
     files: string[];
 }

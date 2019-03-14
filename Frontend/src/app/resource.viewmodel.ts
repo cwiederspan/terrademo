@@ -5,8 +5,9 @@ export class ResourceViewModel {
     constructor(data: Resource) {
         this.resource = data;
     }
-
+    
     public resource: Resource;
+    public visible: boolean = true;
     public showCode: boolean = false;
 
     // This property used for determining whether the item is selected

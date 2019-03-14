@@ -1,13 +1,16 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
 
-  <mat-toolbar color="primary">
+  <mat-toolbar color="primary" class="container-toobar">
     <mat-toolbar-row class="container-toolbar">
       <div fxFlex="50%"></div>
       <div fxFlex="480px" style="text-align: left">
         <span>Terrademo</span>
       </div>
       <div fxFlex="480px" style="text-align: right">
+          <mat-slide-toggle #infra (change)="filterByTag('Infrastructure', infra)" checked="true">Infra</mat-slide-toggle>
+          <mat-slide-toggle #apps (change)="filterByTag('Apps', apps)" checked="true">Apps</mat-slide-toggle>
+          <mat-slide-toggle #data (change)="filterByTag('Data', data)" checked="true">Data</mat-slide-toggle>
           <button mat-flat-button (click)="downloadFile()">Submit</button>
       </div>
       <div fxFlex="50%"></div>
@@ -20,7 +23,8 @@
 
     <div fxFlex="960px" class="container-main">
 
-      <div class="resource-card" *ngFor="let vm of resources">
+      <div class="resource-card" *ngFor="let vm of resources" [hidden]="!vm.visible">
+
         <div class="title">
           <mat-slide-toggle 
             [checked]="vm.required || vm.selected" 
@@ -31,7 +35,6 @@
           <button mat-icon-button class="view-code-button" (click)="vm.showCode = !vm.showCode">
             <mat-icon>code</mat-icon>
           </button>
-
         </div>
 
         <div class="body">
