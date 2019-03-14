@@ -1,6 +1,7 @@
 # Author: Aneal Roney
 # Title: Databricks Workspace
 # Description: This creates an azure databricks workspace in the target resource group. * NOTE: This does not create databricks clusters. *
+# Tags: Data
 
 resource "azurerm_databricks_workspace" "test" {
   name                = "databricks-test"
