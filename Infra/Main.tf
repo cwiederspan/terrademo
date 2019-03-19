@@ -1,3 +1,7 @@
+provider "azurerm" {
+  version = "=1.23.0"
+}
+
 variable "resource_group_name" { }
 
 variable "container_registry_name" { }
@@ -10,10 +14,16 @@ variable "backend_app_name" { }
 
 variable "location" { }
 
+
+# *** Start Resource Group *** #
+
 resource "azurerm_resource_group" "group" {
   name     = "${var.resource_group_name}"
   location = "${var.location}"
 }
+
+
+# *** Start Azure Container Registry (ACR) *** #
 
 resource "azurerm_container_registry" "acr" {
   name                = "${var.container_registry_name}"
@@ -22,6 +32,9 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = true
   sku                 = "Basic"
 }
+
+
+# *** Start App Service Plan *** #
 
 resource "azurerm_app_service_plan" "plan" {
   name                = "${var.app_service_plan_name}"
@@ -35,6 +48,9 @@ resource "azurerm_app_service_plan" "plan" {
     size = "S1"
   }
 }
+
+
+# *** Start App Service for Site Backend API *** #
 
 resource "azurerm_app_service" "backend" {
   name                = "${var.backend_app_name}"
@@ -57,6 +73,9 @@ resource "azurerm_app_service" "backend" {
     DOCKER_REGISTRY_SERVER_PASSWORD     = "${azurerm_container_registry.acr.admin_password}"
   }
 }
+
+
+# *** Start App Service for Site Frontend Client *** #
 
 resource "azurerm_app_service" "frontend" {
   name                = "${var.frontend_app_name}"
