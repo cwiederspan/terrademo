@@ -2,6 +2,12 @@ provider "azurerm" {
   version = "=1.23.0"
 }
 
+terraform {
+  backend "azurerm" {
+    environment = "public"
+  }
+}
+
 variable "resource_group_name" { }
 
 variable "container_registry_name" { }
