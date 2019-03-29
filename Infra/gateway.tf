@@ -110,11 +110,11 @@ resource "azurerm_application_gateway" "gateway" {
     fqdns = ["${azurerm_app_service.backend.default_site_hostname}"]
   }
 
-  backend_address_pool {
-    name  = "${local.backend_address_pool_name_util}"
-    # fqdns = ["${var.storage_name}.blob.core.windows.net/${azurerm_storage_container.container.name}"]
-    fqdns = ["${var.storage_name}.z5.web.core.windows.net"]   # Hard-coded for now, until azurerm can handle setting up static site in storage
-  }
+  # backend_address_pool {
+  #   name  = "${local.backend_address_pool_name_util}"
+  #   # fqdns = ["${var.storage_name}.blob.core.windows.net/${azurerm_storage_container.container.name}"]
+  #   fqdns = ["${var.storage_name}.z5.web.core.windows.net"]   # Hard-coded for now, until azurerm can handle setting up static site in storage
+  # }
 
   backend_http_settings {
     name                  = "${local.http_setting_name}"
@@ -166,13 +166,13 @@ resource "azurerm_application_gateway" "gateway" {
       ]
     }
     
-    path_rule {
-      name                       = "${local.url_path_map_rule_name_util}"
-      backend_address_pool_name  = "${local.backend_address_pool_name_util}"
-      backend_http_settings_name = "${local.http_setting_name}"
-      paths = [
-        "/.well-known/acme-challenge/*",
-      ]
-    }
+    # path_rule {
+    #   name                       = "${local.url_path_map_rule_name_util}"
+    #   backend_address_pool_name  = "${local.backend_address_pool_name_util}"
+    #   backend_http_settings_name = "${local.http_setting_name}"
+    #   paths = [
+    #     "/.well-known/acme-challenge/*",
+    #   ]
+    # }
   }
 }
