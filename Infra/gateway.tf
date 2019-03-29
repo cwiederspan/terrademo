@@ -37,7 +37,8 @@ resource "azurerm_public_ip" "ip" {
 # since these variables are re-used - a locals block makes this more maintainable
 locals {
 
-  backend_address_pool_name      = "${var.gateway_name}-bepool"
+  backend_address_pool_name_www  = "${var.gateway_name}-bepool-www"
+  backend_address_pool_name_api  = "${var.gateway_name}-bepool-api"
   frontend_port_name             = "${var.gateway_name}-feport"
   frontend_ip_configuration_name = "${var.gateway_name}-feip"
   http_setting_name              = "${var.gateway_name}-http"
@@ -45,6 +46,8 @@ locals {
   probe_name                     = "${var.gateway_name}-probe"
   request_routing_rule_name      = "${var.gateway_name}-router"
   gateway_ip_config_name         = "${var.gateway_name}-ipconfig"
+  url_path_map_name              = "${var.gateway_name}-urlpath"
+  url_path_map_rule_name_api     = "${var.gateway_name}-urlrule-api"
 }
 
 resource "azurerm_application_gateway" "gateway" {
@@ -74,8 +77,13 @@ resource "azurerm_application_gateway" "gateway" {
   }
 
   backend_address_pool {
-    name  = "${local.backend_address_pool_name}"
+    name  = "${local.backend_address_pool_name_www}"
     fqdns = ["${azurerm_app_service.frontend.default_site_hostname}"]
+  }
+
+  backend_address_pool {
+    name  = "${local.backend_address_pool_name_api}"
+    fqdns = ["${azurerm_app_service.backend.default_site_hostname}"]
   }
 
   backend_http_settings {
@@ -106,10 +114,26 @@ resource "azurerm_application_gateway" "gateway" {
   }
 
   request_routing_rule {
-    name                       = "${local.request_routing_rule_name}"
-    rule_type                  = "Basic"
-    http_listener_name         = "${local.listener_name}"
-    backend_address_pool_name  = "${local.backend_address_pool_name}"
-    backend_http_settings_name = "${local.http_setting_name}"
+    name                           = "${local.request_routing_rule_name}"
+    rule_type                      = "PathBasedRouting"
+    http_listener_name             = "${local.listener_name}"
+    # backend_address_pool_name      = "${local.backend_address_pool_name_api}"
+    backend_http_settings_name     = "${local.http_setting_name}"
+    url_path_map_name              = "${local.url_path_map_name}"
+  }
+
+  url_path_map {
+    name                               = "${local.url_path_map_name}"
+    default_backend_address_pool_name  = "${local.backend_address_pool_name_www}"
+    default_backend_http_settings_name = "${local.http_setting_name}"
+    
+    path_rule {
+      name                       = "${local.url_path_map_rule_name_api}"
+      backend_address_pool_name  = "${local.backend_address_pool_name_api}"
+      backend_http_settings_name = "${local.http_setting_name}"
+      paths = [
+        "/api/*",
+      ]
+    }
   }
 }

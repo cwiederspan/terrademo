@@ -8,5 +8,8 @@
 # secret.tfvars files
 **/secret*.tfvars
 
+# storage or azurerm backend storage for state
+**/state.tf
+
 # convention for naming -out files from plan
 **/*.tfplan
