@@ -26,7 +26,7 @@ resource "azurerm_storage_container" "container" {
   name                  = "public"
   resource_group_name   = "${azurerm_resource_group.group.name}"
   storage_account_name  = "${azurerm_storage_account.storage.name}"
-  container_access_type = "public"
+  container_access_type = "blob"
 }
 
 resource "azurerm_virtual_network" "vnet" {
@@ -57,6 +57,7 @@ locals {
 
   backend_address_pool_name_www  = "${var.gateway_name}-bepool-www"
   backend_address_pool_name_api  = "${var.gateway_name}-bepool-api"
+  backend_address_pool_name_util = "${var.gateway_name}-bepool-util"
   frontend_port_name             = "${var.gateway_name}-feport"
   frontend_ip_configuration_name = "${var.gateway_name}-feip"
   http_setting_name              = "${var.gateway_name}-http"
