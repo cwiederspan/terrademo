@@ -118,7 +118,7 @@ resource "azurerm_application_gateway" "gateway" {
     rule_type                      = "PathBasedRouting"
     http_listener_name             = "${local.listener_name}"
     # backend_address_pool_name      = "${local.backend_address_pool_name_api}"
-    backend_http_settings_name     = "${local.http_setting_name}"
+    # backend_http_settings_name     = "${local.http_setting_name}"
     url_path_map_name              = "${local.url_path_map_name}"
   }
 
