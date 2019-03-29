@@ -11,8 +11,6 @@ variable "public_ip_name" { }
 variable "vnet_name" { }
 
 
-# *** Start App Gateway *** #
-
 resource "azurerm_storage_account" "storage" {
   name                     = "${var.storage_name}"
   resource_group_name      = "${azurerm_resource_group.group.name}"
@@ -21,11 +19,12 @@ resource "azurerm_storage_account" "storage" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   
+  # Update: This is now taking place in the Azure DevOps pipeline
   # This should use native functionality to turn on static sites for the azurerm, but it's not available yet.
   # Read More: https://github.com/terraform-providers/terraform-provider-azurerm/issues/1903
-  provisioner "local-exec" {
-    command = "az storage blob service-properties update --account-name ${azurerm_storage_account.storage.name} --static-website --index-document Index.html"
-  }
+  # provisioner "local-exec" {
+  #   command = "az storage blob service-properties update --account-name ${azurerm_storage_account.storage.name} --static-website --index-document index.html"
+  # }
 }
 
 resource "azurerm_virtual_network" "vnet" {
