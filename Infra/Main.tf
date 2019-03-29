@@ -78,6 +78,14 @@ resource "azurerm_app_service" "backend" {
     DOCKER_REGISTRY_SERVER_USERNAME     = "${azurerm_container_registry.acr.name}"
     DOCKER_REGISTRY_SERVER_PASSWORD     = "${azurerm_container_registry.acr.admin_password}"
   }
+
+  lifecycle {
+    ignore_changes = [
+      "app_settings.DOCKER_CUSTOM_IMAGE_NAME",
+      "site_config.0.linux_fx_version",
+      "site_config.0.scm_type"
+    ]
+  }
 }
 
 
@@ -102,5 +110,13 @@ resource "azurerm_app_service" "frontend" {
     DOCKER_CUSTOM_IMAGE_NAME            = "https://${azurerm_container_registry.acr.name}.azurecr.io/frontend:latest"
     DOCKER_REGISTRY_SERVER_USERNAME     = "${azurerm_container_registry.acr.name}"
     DOCKER_REGISTRY_SERVER_PASSWORD     = "${azurerm_container_registry.acr.admin_password}"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      "app_settings.DOCKER_CUSTOM_IMAGE_NAME",
+      "site_config.0.linux_fx_version",
+      "site_config.0.scm_type"
+    ]
   }
 }
