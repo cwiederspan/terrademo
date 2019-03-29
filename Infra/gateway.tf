@@ -23,7 +23,7 @@ resource "azurerm_storage_account" "storage" {
 }
 
 resource "azurerm_storage_container" "container" {
-  name                  = "public"
+  name                  = "certchallenge"
   resource_group_name   = "${azurerm_resource_group.group.name}"
   storage_account_name  = "${azurerm_storage_account.storage.name}"
   container_access_type = "blob"
@@ -67,6 +67,7 @@ locals {
   gateway_ip_config_name         = "${var.gateway_name}-ipconfig"
   url_path_map_name              = "${var.gateway_name}-urlpath"
   url_path_map_rule_name_api     = "${var.gateway_name}-urlrule-api"
+  url_path_map_rule_name_util    = "${var.gateway_name}-urlrule-util"
 }
 
 resource "azurerm_application_gateway" "gateway" {
@@ -101,8 +102,8 @@ resource "azurerm_application_gateway" "gateway" {
   }
 
   backend_address_pool {
-    name  = "${local.backend_address_pool_name_api}"
-    fqdns = ["${azurerm_app_service.backend.default_site_hostname}"]
+    name  = "${local.backend_address_pool_name_util}"
+    fqdns = ["https://${var.storage_name}.blob.core.windows.net/${azurerm_storage_container.container.name}"]
   }
 
   backend_http_settings {
@@ -152,6 +153,15 @@ resource "azurerm_application_gateway" "gateway" {
       backend_http_settings_name = "${local.http_setting_name}"
       paths = [
         "/api/*",
+      ]
+    }
+    
+    path_rule {
+      name                       = "${local.url_path_map_rule_name_util}"
+      backend_address_pool_name  = "${local.backend_address_pool_name_util}"
+      backend_http_settings_name = "${local.http_setting_name}"
+      paths = [
+        "/.well-known/acme-challenge/*",
       ]
     }
   }
