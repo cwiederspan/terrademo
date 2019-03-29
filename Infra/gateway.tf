@@ -1,5 +1,7 @@
 variable "gateway_name" { }
 
+variable "storage_name" { }
+
 variable "gateway_instance_count" {
   default = 1
 }
@@ -10,6 +12,22 @@ variable "vnet_name" { }
 
 
 # *** Start App Gateway *** #
+
+resource "azurerm_storage_account" "storage" {
+  name                     = "${var.storage_name}"
+  resource_group_name      = "${azurerm_resource_group.group.name}"
+  location                 = "${azurerm_resource_group.group.location}"
+  account_kind             = "StandardV2"
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "container" {
+  name                  = "public"
+  resource_group_name   = "${azurerm_resource_group.group.name}"
+  storage_account_name  = "${azurerm_storage_account.storage.name}"
+  container_access_type = "public"
+}
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "${var.vnet_name}"
@@ -117,8 +135,8 @@ resource "azurerm_application_gateway" "gateway" {
     name                           = "${local.request_routing_rule_name}"
     rule_type                      = "PathBasedRouting"
     http_listener_name             = "${local.listener_name}"
-    # backend_address_pool_name      = "${local.backend_address_pool_name_api}"
-    # backend_http_settings_name     = "${local.http_setting_name}"
+    # backend_address_pool_name    = "${local.backend_address_pool_name_api}"
+    # backend_http_settings_name   = "${local.http_setting_name}"
     url_path_map_name              = "${local.url_path_map_name}"
   }
 
