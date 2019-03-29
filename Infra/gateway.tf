@@ -20,6 +20,10 @@ resource "azurerm_storage_account" "storage" {
   account_kind             = "StorageV2"
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  
+  provisioner "local-exec" {
+    command = "az storage blob service-properties update --account-name ${azurerm_storage_account.storage.name} --static-website"
+  }
 }
 
 resource "azurerm_storage_container" "container" {
@@ -102,8 +106,14 @@ resource "azurerm_application_gateway" "gateway" {
   }
 
   backend_address_pool {
+    name  = "${local.backend_address_pool_name_api}"
+    fqdns = ["${azurerm_app_service.backend.default_site_hostname}"]
+  }
+
+  backend_address_pool {
     name  = "${local.backend_address_pool_name_util}"
-    fqdns = ["https://${var.storage_name}.blob.core.windows.net/${azurerm_storage_container.container.name}"]
+    # fqdns = ["${var.storage_name}.blob.core.windows.net/${azurerm_storage_container.container.name}"]
+    fqdns = ["${var.storage_name}.z5.web.core.windows.net"]   # Hard-coded for now, until azurerm can handle setting up static site in storage
   }
 
   backend_http_settings {
@@ -137,8 +147,8 @@ resource "azurerm_application_gateway" "gateway" {
     name                           = "${local.request_routing_rule_name}"
     rule_type                      = "PathBasedRouting"
     http_listener_name             = "${local.listener_name}"
-    # backend_address_pool_name    = "${local.backend_address_pool_name_api}"
-    # backend_http_settings_name   = "${local.http_setting_name}"
+    # backend_address_pool_name    = "${local.backend_address_pool_name}"   # Don't Use
+    # backend_http_settings_name   = "${local.http_setting_name}"           # Don't Use
     url_path_map_name              = "${local.url_path_map_name}"
   }
 
