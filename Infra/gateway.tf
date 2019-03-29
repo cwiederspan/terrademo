@@ -21,16 +21,11 @@ resource "azurerm_storage_account" "storage" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   
+  # This should use native functionality to turn on static sites for the azurerm, but it's not available yet.
+  # Read More: https://github.com/terraform-providers/terraform-provider-azurerm/issues/1903
   provisioner "local-exec" {
-    command = "az storage blob service-properties update --account-name ${azurerm_storage_account.storage.name} --static-website"
+    command = "az storage blob service-properties update --account-name ${azurerm_storage_account.storage.name} --static-website --index-document Index.html"
   }
-}
-
-resource "azurerm_storage_container" "container" {
-  name                  = "certchallenge"
-  resource_group_name   = "${azurerm_resource_group.group.name}"
-  storage_account_name  = "${azurerm_storage_account.storage.name}"
-  container_access_type = "blob"
 }
 
 resource "azurerm_virtual_network" "vnet" {
@@ -110,9 +105,9 @@ resource "azurerm_application_gateway" "gateway" {
     fqdns = ["${azurerm_app_service.backend.default_site_hostname}"]
   }
 
+  # TODO: This should use an export value from the storage account once that functionality is available
   backend_address_pool {
     name  = "${local.backend_address_pool_name_util}"
-    # fqdns = ["${var.storage_name}.blob.core.windows.net/${azurerm_storage_container.container.name}"]
     fqdns = ["${var.storage_name}.z5.web.core.windows.net"]   # Hard-coded for now, until azurerm can handle setting up static site in storage
   }
 
