@@ -166,13 +166,13 @@ resource "azurerm_application_gateway" "gateway" {
       ]
     }
     
-    path_rule {
-      name                       = "${local.url_path_map_rule_name_util}"
-      backend_address_pool_name  = "${local.backend_address_pool_name_util}"
-      backend_http_settings_name = "${local.http_setting_name}"
-      paths = [
-        "/.well-known/acme-challenge/*"
-      ]
-    }
+    # path_rule {
+    #   name                       = "${local.url_path_map_rule_name_util}"
+    #   backend_address_pool_name  = "${local.backend_address_pool_name_util}"
+    #   backend_http_settings_name = "${local.http_setting_name}"
+    #   paths = [
+    #     "/.well-known/acme-challenge/*"
+    #   ]
+    # }
   }
 }
