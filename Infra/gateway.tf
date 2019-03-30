@@ -10,7 +10,7 @@ variable "public_ip_name" { }
 
 variable "vnet_name" { }
 
-variable "ssl_data" { }
+variable "ssl_filename" { }
 
 variable "ssl_password" { }
 
