@@ -13,3 +13,6 @@
 
 # convention for naming -out files from plan
 **/*.tfplan
+
+# ignore any local certs used for local testing
+*.pfx

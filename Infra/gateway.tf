@@ -10,6 +10,10 @@ variable "public_ip_name" { }
 
 variable "vnet_name" { }
 
+variable "ssl_data" { }
+
+variable "ssl_password" { }
+
 
 resource "azurerm_storage_account" "storage" {
   name                     = "${var.storage_name}"
@@ -66,6 +70,7 @@ locals {
   url_path_map_name              = "${var.gateway_name}-urlpath"
   url_path_map_rule_name_api     = "${var.gateway_name}-urlrule-api"
   url_path_map_rule_name_util    = "${var.gateway_name}-urlrule-util"
+  ssl_name                       = "${var.gateway_name}-ssl"
 }
 
 resource "azurerm_application_gateway" "gateway" {
@@ -86,7 +91,7 @@ resource "azurerm_application_gateway" "gateway" {
 
   frontend_port {
     name = "${local.frontend_port_name}"
-    port = 80
+    port = 443
   }
 
   frontend_ip_configuration {
@@ -113,8 +118,8 @@ resource "azurerm_application_gateway" "gateway" {
   backend_http_settings {
     name                  = "${local.http_setting_name}"
     cookie_based_affinity = "Disabled"
-    port                  = 80
-    protocol              = "http"
+    port                  = 443
+    protocol              = "https"
     request_timeout       = 1
     probe_name            = "${local.probe_name}"
     pick_host_name_from_backend_address = "true"
@@ -124,12 +129,22 @@ resource "azurerm_application_gateway" "gateway" {
     name                           = "${local.listener_name}"
     frontend_ip_configuration_name = "${local.frontend_ip_configuration_name}"
     frontend_port_name             = "${local.frontend_port_name}"
-    protocol                       = "http"
+    protocol                       = "https"
+    ssl_certificate_name           = "${local.ssl_name}"
+  }
+
+  ssl_certificate {
+    name     = "${local.ssl_name}"
+    # data     = "${base64encode(file("${var.ssl_data}"))}"
+    # data     = "${base64encode(file("certificate.pfx"))}"
+    # data     = "${var.ssl_data}"
+    data     = "${base64encode("${var.ssl_data}")}"
+    password = "${var.ssl_password}"
   }
 
   probe {
     name                = "${local.probe_name}"
-    protocol            = "http"
+    protocol            = "https"
     path                = "/"
     interval            = 30
     timeout             = 30
