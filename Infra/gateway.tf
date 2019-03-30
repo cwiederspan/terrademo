@@ -144,11 +144,7 @@ resource "azurerm_application_gateway" "gateway" {
 
   ssl_certificate {
     name       = "${local.ssl_name}"
-    #data      = "${base64encode(file("${var.ssl_filename}"))}"
     data       = "${file("${var.ssl_filename}")}"
-    # data     = "${var.ssl_filename}"
-    # data     = "${base64encode("${var.ssl_filename}")}"
-    # data     = "${base64encode(var.ssl_filename)}"
     password   = "${var.ssl_password}"
   }
 
@@ -166,8 +162,6 @@ resource "azurerm_application_gateway" "gateway" {
     name                           = "${local.request_routing_rule_name}-http"
     rule_type                      = "PathBasedRouting"
     http_listener_name             = "${local.listener_name}-http"
-    # backend_address_pool_name    = "${local.backend_address_pool_name}"   # Don't Use
-    # backend_http_settings_name   = "${local.http_setting_name}"           # Don't Use
     url_path_map_name              = "${local.url_path_map_name}"
   }
 
@@ -175,8 +169,6 @@ resource "azurerm_application_gateway" "gateway" {
     name                           = "${local.request_routing_rule_name}-https"
     rule_type                      = "PathBasedRouting"
     http_listener_name             = "${local.listener_name}-https"
-    # backend_address_pool_name    = "${local.backend_address_pool_name}"   # Don't Use
-    # backend_http_settings_name   = "${local.http_setting_name}"           # Don't Use
     url_path_map_name              = "${local.url_path_map_name}"
   }
 
