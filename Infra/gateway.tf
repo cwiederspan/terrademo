@@ -57,9 +57,7 @@ resource "azurerm_public_ip" "ip" {
 # since these variables are re-used - a locals block makes this more maintainable
 locals {
 
-  backend_address_pool_name_www  = "${var.gateway_name}-bepool-www"
-  backend_address_pool_name_api  = "${var.gateway_name}-bepool-api"
-  backend_address_pool_name_util = "${var.gateway_name}-bepool-util"
+  backend_address_pool_name      = "${var.gateway_name}-bepool"
   frontend_port_name             = "${var.gateway_name}-feport"
   frontend_ip_configuration_name = "${var.gateway_name}-feip"
   http_setting_name              = "${var.gateway_name}-http"
@@ -68,8 +66,7 @@ locals {
   request_routing_rule_name      = "${var.gateway_name}-router"
   gateway_ip_config_name         = "${var.gateway_name}-ipconfig"
   url_path_map_name              = "${var.gateway_name}-urlpath"
-  url_path_map_rule_name_api     = "${var.gateway_name}-urlrule-api"
-  url_path_map_rule_name_util    = "${var.gateway_name}-urlrule-util"
+  url_path_map_rule_name         = "${var.gateway_name}-urlrule"
   ssl_name                       = "${var.gateway_name}-ssl"
 }
 
@@ -90,7 +87,12 @@ resource "azurerm_application_gateway" "gateway" {
   }
 
   frontend_port {
-    name = "${local.frontend_port_name}"
+    name = "${local.frontend_port_name}-http"
+    port = 80
+  }
+
+  frontend_port {
+    name = "${local.frontend_port_name}-https"
     port = 443
   }
 
@@ -100,18 +102,18 @@ resource "azurerm_application_gateway" "gateway" {
   }
 
   backend_address_pool {
-    name  = "${local.backend_address_pool_name_www}"
+    name  = "${local.backend_address_pool_name}-www"
     fqdns = ["${azurerm_app_service.frontend.default_site_hostname}"]
   }
 
   backend_address_pool {
-    name  = "${local.backend_address_pool_name_api}"
+    name  = "${local.backend_address_pool_name}-api"
     fqdns = ["${azurerm_app_service.backend.default_site_hostname}"]
   }
 
   # TODO: This should use an export value from the storage account once that functionality is available
   backend_address_pool {
-    name  = "${local.backend_address_pool_name_util}"
+    name  = "${local.backend_address_pool_name}-util"
     fqdns = ["${var.storage_name}.z5.web.core.windows.net"]   # Hard-coded for now, until azurerm can handle setting up static site in storage
   }
 
@@ -126,19 +128,26 @@ resource "azurerm_application_gateway" "gateway" {
   }
 
   http_listener {
-    name                           = "${local.listener_name}"
+    name                           = "${local.listener_name}-http"
     frontend_ip_configuration_name = "${local.frontend_ip_configuration_name}"
-    frontend_port_name             = "${local.frontend_port_name}"
+    frontend_port_name             = "${local.frontend_port_name}-http"
+    protocol                       = "http"
+  }
+
+  http_listener {
+    name                           = "${local.listener_name}-https"
+    frontend_ip_configuration_name = "${local.frontend_ip_configuration_name}"
+    frontend_port_name             = "${local.frontend_port_name}-https"
     protocol                       = "https"
     ssl_certificate_name           = "${local.ssl_name}"
   }
 
   ssl_certificate {
     name     = "${local.ssl_name}"
-    # data     = "${base64encode(file("${var.ssl_data}"))}"
-    # data     = "${base64encode(file("certificate.pfx"))}"
-    # data     = "${var.ssl_data}"
-    data     = "${base64encode("${var.ssl_data}")}"
+    data     = "${base64encode(file("${var.ssl_filename}"))}"
+    # data     = "${var.ssl_filename}"
+    # data     = "${base64encode("${var.ssl_filename}")}"
+    # data     = "${base64encode(var.ssl_filename)}"
     password = "${var.ssl_password}"
   }
 
@@ -153,9 +162,18 @@ resource "azurerm_application_gateway" "gateway" {
   }
 
   request_routing_rule {
-    name                           = "${local.request_routing_rule_name}"
+    name                           = "${local.request_routing_rule_name}-http"
     rule_type                      = "PathBasedRouting"
-    http_listener_name             = "${local.listener_name}"
+    http_listener_name             = "${local.listener_name}-http"
+    # backend_address_pool_name    = "${local.backend_address_pool_name}"   # Don't Use
+    # backend_http_settings_name   = "${local.http_setting_name}"           # Don't Use
+    url_path_map_name              = "${local.url_path_map_name}"
+  }
+
+  request_routing_rule {
+    name                           = "${local.request_routing_rule_name}-https"
+    rule_type                      = "PathBasedRouting"
+    http_listener_name             = "${local.listener_name}-https"
     # backend_address_pool_name    = "${local.backend_address_pool_name}"   # Don't Use
     # backend_http_settings_name   = "${local.http_setting_name}"           # Don't Use
     url_path_map_name              = "${local.url_path_map_name}"
@@ -163,12 +181,12 @@ resource "azurerm_application_gateway" "gateway" {
 
   url_path_map {
     name                               = "${local.url_path_map_name}"
-    default_backend_address_pool_name  = "${local.backend_address_pool_name_www}"
+    default_backend_address_pool_name  = "${local.backend_address_pool_name}-www"
     default_backend_http_settings_name = "${local.http_setting_name}"
     
     path_rule {
-      name                       = "${local.url_path_map_rule_name_api}"
-      backend_address_pool_name  = "${local.backend_address_pool_name_api}"
+      name                       = "${local.url_path_map_rule_name}-api"
+      backend_address_pool_name  = "${local.backend_address_pool_name}-api"
       backend_http_settings_name = "${local.http_setting_name}"
       paths = [
         "/api/*"
@@ -176,8 +194,8 @@ resource "azurerm_application_gateway" "gateway" {
     }
     
     path_rule {
-      name                       = "${local.url_path_map_rule_name_util}"
-      backend_address_pool_name  = "${local.backend_address_pool_name_util}"
+      name                       = "${local.url_path_map_rule_name}-util"
+      backend_address_pool_name  = "${local.backend_address_pool_name}-util"
       backend_http_settings_name = "${local.http_setting_name}"
       paths = [
         "/.well-known/acme-challenge/*"
