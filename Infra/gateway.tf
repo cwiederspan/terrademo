@@ -143,12 +143,13 @@ resource "azurerm_application_gateway" "gateway" {
   }
 
   ssl_certificate {
-    name     = "${local.ssl_name}"
-    data     = "${base64encode(file("${var.ssl_filename}"))}"
+    name       = "${local.ssl_name}"
+    #data      = "${base64encode(file("${var.ssl_filename}"))}"
+    data       = "${file("${var.ssl_filename}")}"
     # data     = "${var.ssl_filename}"
     # data     = "${base64encode("${var.ssl_filename}")}"
     # data     = "${base64encode(var.ssl_filename)}"
-    password = "${var.ssl_password}"
+    password   = "${var.ssl_password}"
   }
 
   probe {
