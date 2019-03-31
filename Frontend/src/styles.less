@@ -1,10 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+//@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 @import "~prismjs/plugins/toolbar/prism-toolbar.css";
 @import "~prismjs/themes/prism.css";
 
-@primary: #3f51b5;
+@primary: #0078d4;
 
 html, body { 
     height: 100%; 
@@ -17,6 +17,7 @@ body {
 }
 
 // Rotate the Toggle Bars so they're left/on and right/off
+/*
 .mat-slide-toggle-bar {
   transform: rotate(180deg);
 
@@ -24,6 +25,7 @@ body {
     transform: rotate(180deg);
   }
 }
+*/
 
 .container-toobar {
   mat-slide-toggle {
@@ -61,6 +63,22 @@ body {
     padding-bottom: 12px;
     font-size: 16px;
     font-weight: 400;
+
+    mat-slide-toggle[hidden] {
+      display: none;
+    }
+
+    &.selected {
+      background-color: @primary;
+
+      span.mat-slide-toggle-content {
+        color: white;
+      }
+
+      .view-code-button {
+        color: white;
+      }
+    }
 
     .view-code-button {
       color: rgba(0, 0, 0, 0.40);

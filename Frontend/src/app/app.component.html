@@ -25,12 +25,13 @@
 
       <div class="resource-card" *ngFor="let vm of resources" [hidden]="!vm.visible">
 
-        <div class="title">
+        <div class="title" [ngClass]="vm.required || vm.selected ? 'selected' : ''">
           <mat-slide-toggle 
-            [checked]="vm.required || vm.selected" 
+            [hidden]="vm.required"
+            [checked]="vm.selected" 
             (change)="vm.selected = !vm.selected"
-            [disabled]="vm.required"
           >{{ vm.resource.title }}</mat-slide-toggle>
+          <span class="mat-slide-toggle-content" [hidden]="!vm.required">{{ vm.resource.title }}</span>
           <!-- <mat-checkbox>SQL Server w/ Sample Database</mat-checkbox> -->
           <button mat-icon-button class="view-code-button" (click)="vm.showCode = !vm.showCode">
             <mat-icon>code</mat-icon>
