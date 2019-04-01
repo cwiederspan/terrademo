@@ -27,11 +27,11 @@
 
         <div class="title" [ngClass]="vm.required || vm.selected ? 'selected' : ''">
           <mat-slide-toggle 
-            [hidden]="vm.required"
+            *ngIf="!vm.required"
             [checked]="vm.selected" 
             (change)="vm.selected = !vm.selected"
           >{{ vm.resource.title }}</mat-slide-toggle>
-          <span class="mat-slide-toggle-content" [hidden]="!vm.required">{{ vm.resource.title }}</span>
+          <span class="mat-slide-toggle-content" *ngIf="vm.required">{{ vm.resource.title }}</span>
           <!-- <mat-checkbox>SQL Server w/ Sample Database</mat-checkbox> -->
           <button mat-icon-button class="view-code-button" (click)="vm.showCode = !vm.showCode">
             <mat-icon>code</mat-icon>
@@ -40,8 +40,11 @@
 
         <div class="body">
 
-          <div class="label">Description</div>
-          <p>{{ vm.resource.description }}</p>
+          <div *ngIf="vm.resource.description">
+            <div class="label">Description</div>
+            <p>{{ vm.resource.description }}</p>            
+          </div>
+
           
           <div class="label">Created by</div>
           <p>{{ vm.resource.author }}</p>
