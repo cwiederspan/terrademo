@@ -3,9 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  
   production: false,
-  backendUrl: 'http://localhost:32700'
-  //backendUrl: 'https://ga-web-api-prod-20180723.azurewebsites.net'
+
+  backendUrl: 'http://localhost:32700',
+  //backendUrl: 'https://ga-web-api-prod-20180723.azurewebsites.net',
+
+  appInsightsKey: '7f6cfcea-3cca-4a97-8afe-44ccb2b73d77'
 };
 
 /*

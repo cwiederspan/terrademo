@@ -13,6 +13,7 @@ import { HighlightService } from './highlight.service';
 import { ResourceService } from './resource.service';
 
 import { FileSaverModule } from 'ngx-filesaver';
+import { AppInsightService } from './app-insights.service';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { FileSaverModule } from 'ngx-filesaver';
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
     HighlightService,
-    ResourceService
+    ResourceService,
+    AppInsightService
   ],
   bootstrap: [AppComponent]
 })
