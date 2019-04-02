@@ -12,6 +12,8 @@ variable "resource_group_name" { }
 
 variable "container_registry_name" { }
 
+variable "app_insights_name" { }
+
 variable "app_service_plan_name" { }
 
 variable "frontend_app_name" { }
@@ -37,6 +39,16 @@ resource "azurerm_container_registry" "acr" {
   location            = "${azurerm_resource_group.group.location}"
   admin_enabled       = true
   sku                 = "Basic"
+}
+
+
+# *** Start Application Insights *** #
+
+resource "azurerm_application_insights" "insights" {
+  name                = "${var.app_insights_name}"
+  resource_group_name = "${azurerm_resource_group.group.name}"
+  location            = "${azurerm_resource_group.group.location}"
+  application_type    = "Web"
 }
 
 
