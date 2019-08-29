@@ -76,8 +76,8 @@ resource "azurerm_application_gateway" "gateway" {
   location            = "${azurerm_resource_group.group.location}"
 
   sku {
-    name     = "WAF_v2"
-    tier     = "WAF_v2"
+    name     = "Standard_v2"
+    tier     = "Standard_v2"
     capacity = "${var.gateway_instance_count}"
   }
 
