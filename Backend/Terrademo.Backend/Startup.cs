@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector.QuickPulse;
 
 using Terrademo.Backend.Services;
 
@@ -27,6 +28,8 @@ namespace Terrademo.Backend {
         public void ConfigureServices(IServiceCollection services) {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.ConfigureTelemetryModule<QuickPulseTelemetryModule>((module, o) => module.AuthenticationApiKey = Configuration.GetValue<string>("ApplicationInsights:SecureApiKey"));
 
             // Add CORS support
             services.AddCors();
