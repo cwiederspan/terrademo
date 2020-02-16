@@ -41,5 +41,6 @@ openssl pkcs12 -export -out certificate.pfx -inkey privkeyN.pem -in certN.pem -c
 # Upload this file to the Azure Key Vault
 
 # Rerun the Terraform Infra pipeline
+https://dev.azure.com/ateamsw/Terrademo/_release?_a=releases&view=mine&definitionId=3
 
 ```
