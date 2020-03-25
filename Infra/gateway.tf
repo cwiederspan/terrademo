@@ -147,7 +147,8 @@ resource "azurerm_application_gateway" "gateway" {
 
   ssl_certificate {
     name     = local.ssl_name
-    data     = file(var.ssl_filename)
+    # data     = file(var.ssl_filename)
+    data     = filebase64(var.ssl_filename)
     password = var.ssl_password
   }
 
