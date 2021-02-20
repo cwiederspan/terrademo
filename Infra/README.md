@@ -9,7 +9,7 @@ terraform plan -state=terraform-prod.tfstate -var-file=secrets-prod.tfvars
 ```bash
 
 # Get to the correct directory
-cd /c/Temp/certbot
+cd /mnt/c/Temp/certbot
 
 # Run the certbot container in Docker
 docker run -it --rm --name certbot \
